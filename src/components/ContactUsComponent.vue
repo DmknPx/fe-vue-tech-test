@@ -8,6 +8,8 @@
   />
 
   <DynamicDialog />
+
+  <Toast position="bottom-center" />
 </template>
 
 <script setup lang="ts">
@@ -15,11 +17,14 @@ import { defineAsyncComponent } from "vue";
 
 import Button from "primevue/button";
 import DynamicDialog from "primevue/dynamicdialog";
+import Toast from "primevue/toast";
 import { useDialog } from "primevue/usedialog";
+import { useToast } from "primevue/usetoast";
 import type { ContactMessageData } from "../types/contact-us.types";
 
-const dialog = useDialog();
 const contactUsComponent = defineAsyncComponent(() => import("./ContactUsForm.vue"));
+const dialog = useDialog();
+const toast = useToast();
 
 const sendMessage = async (messageData: ContactMessageData) => {
   try {
@@ -41,6 +46,15 @@ const sendMessage = async (messageData: ContactMessageData) => {
   }
 };
 
+const showSuccessToast = () => {
+  toast.add({
+    severity: "success",
+    summary: "Success",
+    detail: "Message has been successfully sent",
+    life: 3000,
+  });
+};
+
 const showContactUsDialog = () => {
   const dialogRef = dialog.open(contactUsComponent, {
     props: {
@@ -59,6 +73,7 @@ const showContactUsDialog = () => {
         try {
           await sendMessage(messageData);
           dialogRef.close();
+          showSuccessToast();
         } catch (error) {
           console.error("Failed to send message: ", error);
         }

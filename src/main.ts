@@ -7,6 +7,7 @@ import router from "./router";
 
 import PrimeVue from "primevue/config";
 import DialogService from "primevue/dialogservice";
+import ToastService from "primevue/toastservice";
 import Aura from "@primeuix/themes/aura";
 
 import App from "./App.vue";
@@ -20,6 +21,6 @@ app.use(PrimeVue, {
     preset: Aura,
   },
 });
-app.use(DialogService);
+[DialogService, ToastService].forEach((service) => app.use(service));
 
 app.mount("#app");
